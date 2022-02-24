@@ -1,0 +1,10 @@
+﻿@model IEnumerable<MVC.Models.BlogComment>
+<div id="comment-section" class="row">
+    <div class="col-sm-7">
+        <ul class="comments">
+            <partial name="~/Views/Shared/Components/Comment/_CommentPartial.cshtml" model="(Model.Where(x => x.ParentId == 0))" />
+        </ul>
+    </div>
+
+</div>
+

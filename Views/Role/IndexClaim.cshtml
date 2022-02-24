@@ -1,0 +1,105 @@
+﻿@model MVC.Data.Model.Role.RoleClaimViewModel
+
+@{
+    Layout = "~/Views/Role/Manage/_Layout.cshtml";
+}
+<partial name="_StatusMessage" model="@Model.StatusMessage" />
+
+<h1>Danh Sách Quyền</h1>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                @Html.HiddenFor(m => @Model.roleid)
+            </div>
+            <table class="table">
+                @foreach (var item in Model.claims)
+                {
+                    <tbody>
+                        <tr>
+                            <td>
+                                @item.Item
+                            </td>
+                            @for (int i = 0; i < item.Permissions.Count; i++)
+                            {
+                                <td class="Claims">
+                                    @Html.HiddenFor(m => item.Permissions[i].ClaimValue)
+                                    @Html.CheckBoxFor(m => @item.Permissions[i].isChecked)
+                                    <label>@item.Permissions[i].ClaimValue.Split(".")[2]</label>
+                                </td>
+                            }
+                        </tr>
+                    </tbody>
+
+                }
+
+
+            </table>
+            <div class="form-group">
+                <input id="edit-or-not" type="submit" class="btn btn-primary" hidden="hidden"  />
+            </div>
+
+    </div>
+</div>
+
+<a asp-controller="Role" asp-action="Index">Danh sách</a>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $('input[type="checkbox"]').on('change', function () {
+            $("#edit-or-not").prop("hidden", false);
+        });
+        $("input[type=checkbox]").change(function () {
+            if ($(this).prop("checked")) {
+                $(this).val(true);
+            } else {
+                $(this).val(false);
+            }
+        });
+
+        $(document).ready(function () {
+            $(function () {
+                $("#edit-or-not").click(function (e) {
+                    var id = $("#roleid").val();
+                    var claim = new Array();
+                    
+                    $('tr').each(function () {
+                        var subClaim = {};
+                        var row = $(this);
+                        subClaim.Item = row.find('td').eq(0).text().trim();
+                        var subPermissions = new Array();
+                        $(this).children('td[class="Claims"]').each(function () {
+                            var subItem = {};
+                            subItem.isChecked = $(this).children('input[type="checkbox"]').is(':checked');
+                            subItem.ClaimValue = $(this).children('label').html();
+                            subPermissions.push(subItem);
+                        });
+                        subClaim.Permissions = subPermissions;
+                        claim.push(subClaim);
+                    });
+                    button = $(this);
+                    $.ajax({
+                        url: "/Role/IndexClaim",
+                        type: "Post",
+                        data: {
+                            roleid: id,
+                            claims: claim
+                        },
+                        success: function (result, status, xhr) {
+                            alert($('input[type="checkbox"]').val());
+                        },
+                        error: function (xhr, status, error) {
+                            alert("Error");
+                        }
+                    });
+                });
+
+            });
+        });
+
+    </script>
+}

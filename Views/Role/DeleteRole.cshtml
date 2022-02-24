@@ -1,0 +1,24 @@
+﻿@model MVC.Data.Model.Role.RoleModel
+@{
+    ViewData["Title"] = "Xóa role";
+    Layout = "~/Views/Role/Manage/_Layout.cshtml";
+}
+
+<h4>@ViewData["Title"]</h4>
+<div class="row">
+    <div class="col-md-6">
+        <p>Bạn có chăc chắn xóa Role <strong>@Model.Name</strong> </p>
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="ID">
+            <input type="hidden" asp-for="Name">
+            <input type="hidden" asp-for="IsUpdate">
+            <a class="btn btn-primary" asp-action="Index">Danh sách</a>
+            <button type="submit" class="btn btn-danger">Xóa</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

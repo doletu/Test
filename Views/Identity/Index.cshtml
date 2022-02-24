@@ -1,0 +1,72 @@
+﻿@model UserModel
+@{
+    ViewData["Title"] = "HỒ SƠ";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+    Layout = "~/Views/Shared/Admin/Manage/_Layout.cshtml";
+}
+
+<h4>@ViewData["Title"]</h4>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+<div class="u-section-row">
+
+    <form id="profile-form" method="post" enctype="multipart/form-data">
+        <div class="grid-container">
+
+            <div class="grid-item1">
+                <div class="form-group">
+                    <label asp-for="@Model.ImageUrl"></label>
+                    <br />
+                    <img id="Avatar_Image" src="@Model.ImageUrl" style="width:300px;height:250px; border-radius:25px;border:10px solid black;" />
+
+                    <span asp-validation-for="@Model.ImageUrl" class="text-danger"></span>
+                </div>
+                <input type="file" id="file1" name="file1" />
+            </div>
+            <div class="grid-item2">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Username"></label>
+                    <input asp-for="Username" class="form-control" disabled />
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.PhoneNumber"></label>
+                    <input asp-for="@Model.PhoneNumber" class="form-control" />
+                    <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.FullName"></label>
+                    <input asp-for="@Model.FullName" class="form-control" />
+                    <span asp-validation-for="@Model.FullName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Address"></label>
+                    <input asp-for="@Model.Address" class="form-control" />
+                    <span asp-validation-for="@Model.Address" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Birthday"></label>
+                    <input asp-for="@Model.Birthday" class="form-control" />
+                    <span asp-validation-for="@Model.Birthday" class="text-danger"></span>
+                </div>
+
+                <button id="update-profile-button" type="submit" class="btn btn-danger">Lưu hồ sơ</button>
+            </div>
+
+
+        </div>
+            
+    </form>
+
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+
+        $('#file1').on("change", function () {
+            var src = $(this).val();
+            $("#Avatar_Image").prop("src", src);
+        });
+
+    </script>
+
+}

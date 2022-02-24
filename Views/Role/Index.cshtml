@@ -1,0 +1,47 @@
+﻿@model MVC.Controllers.Identity.ListRoleModel
+@{
+    Layout = "~/Views/Role/Manage/_Layout.cshtml";
+    ViewData["ActivePage"] = ManageNavPages.RoleClaimIndex;
+}
+
+
+<h1>Danh sách các role</h1>
+<partial name="_StatusMessage" model="@Model.StatusMessage" />
+<a class="btn btn-secondary"
+   asp-controller="Role" asp-action="AddOrEdit">
+    Thêm mới Role
+</a>
+<table class="table">
+    <tr>
+        <th>Role ID</th>
+        <th>Tên</th>
+        <th>Tác vụ</th>
+    </tr>
+    @foreach (var role in @Model.roles)
+    {
+        <tr>
+            <td>@role.Id</td>
+            <td>@role.Name</td>
+            <td>
+                <a name="Input.ID" value="@role.Id" class="btn btn-success btn-sm"
+                   asp-route-roleid="@role.Id"
+                   asp-controller="Role" asp-action="AddOrEdit">
+                    Cập nhật Role
+                </a>
+
+
+
+                <a name="rolename" class="btn btn-success btn-sm"
+                   asp-route-roleid="@role.Id"
+                   asp-controller="Role" asp-action="IndexClaim">Claims</a>
+
+                <a name="Input.ID" value="@role.Id" class="btn btn-success btn-sm"
+                     asp-route-roleid="@role.Id"
+                        asp-controller="Role" asp-action="DeleteRole">
+                    Xóa Role
+                </a>
+
+            </td>
+        </tr>
+    }
+</table>

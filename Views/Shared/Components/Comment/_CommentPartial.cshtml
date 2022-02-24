@@ -1,0 +1,40 @@
+﻿
+@model IEnumerable<MVC.Models.BlogComment>
+<head>
+    <link href="~/Template/Comment.css" rel="stylesheet" />
+</head>
+
+
+
+@foreach (var comment in @Model)
+{
+
+    <li class="comment" data-id="@comment.Id">
+        <div class="avatar">
+            <a href="javascript:void(0);">
+                <img src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" width="55" height="55">
+            </a>
+        </div>
+        <div data-id="@comment.Id" class="comment-body">
+            <header><a href="javascript:void(0);" class="userlink">@comment.UserName</a> - <span class="pubdate">posted @comment.CommentTime.ToString("dd-MM-yyyy")</span></header>
+            <p>
+                @comment.CommentText
+            </p>
+            <footer>
+                <a class="reply-link" href="@comment.Id">Reply</a>
+            </footer>
+        </div>
+
+        @{
+            var children = Model.Where(x => x.ParentId == comment.Id).ToList();
+            if (children.Count() > 0)
+            {
+                <ul data-parentid="@comment.Id" class="replies">
+                    <partial name="_CommentPartial.cshtml" model="@children" />
+                </ul>
+            }
+        }
+
+    </li>
+
+}

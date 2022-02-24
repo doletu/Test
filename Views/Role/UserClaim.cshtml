@@ -1,0 +1,103 @@
+﻿@model MVC.Data.Model.Role.UserListModel
+@{
+    ViewData["Title"] = "DANH SÁCH NGƯỜI DÙNG";
+    Layout = "~/Views/Role/Manage/_Layout.cshtml";
+    ViewData["ActivePage"] = ManageNavPages.RoleClaimIndex;
+}
+
+
+<partial name="_StatusMessage" model="@Model.StatusMessage" />
+
+
+<table class="table table-striped">
+    <tr>
+        <th>UserName</th>
+        <th>Roles</th>
+        <th>Actions</th>
+    </tr>
+    @foreach (var user in @Model.users)
+    {
+        <tr>
+            <td>@user.UserName</td>
+            <td>@user.listroles</td>
+            <td>
+                <a name="rolename" class="btn btn-success btn-sm"
+                   asp-route-roleid="@user.Id"
+                   asp-controller="Role" asp-action="IndexClaim">Claims</a>
+                @if(@user.Status==true){
+                    <button name="Input.ID" id="changeStatus" class="btn btn-success btn-sm"
+                            value="@user.Id">
+                        Active
+                    </button>
+                 }else{
+                    <button name="Input.ID" id="changeStatus" class="btn btn-danger btn-sm"
+                            value="@user.Id">
+                        InActive
+                    </button>
+                 }
+
+            </td>
+        </tr>
+
+    }
+</table>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            $(function () {
+                $("#changeStatus").click(function (e) {
+                    var id = $(this).val();
+                    button = $(this);
+                    $.ajax({
+                        url: "/api/User/changeStatus",
+                        data: id,
+                        type: "Post",
+                        success: function (result, status, xhr) {
+                            alert("Đổi trạng thái thành công");
+                            if (button.hasClass("btn-success")) {
+                                button.removeClass("btn-success"); 
+                                button.removeClass("btn-danger");
+                                button.text("InActive");
+                            } else {
+                                button.removeClass("btn-danger");
+                                button.removeClass("btn-success");
+                                button.text("Active");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert("Error");
+                        }
+                    });
+                });
+
+            });
+        });
+        
+
+
+
+        
+
+       
+
+    </script>
+}
+@{
+
+    Func<int?, string> generateUrl = (int? _pagenumber) =>
+    {
+        return Url.ActionLink("UserClaim", "Role", new { pageNumber = _pagenumber });
+    };
+
+    var datapaging = new
+    {
+        currentPage = Model.pageNumber,
+        countPages = Model.totalPages,
+        generateUrl = generateUrl
+    };
+
+}
+<partial name="_Paging" model="@datapaging" />

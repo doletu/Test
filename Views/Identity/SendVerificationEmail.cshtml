@@ -1,0 +1,16 @@
+﻿@model EmailModel
+@{
+    ViewData["Title"] = "QUẢN LÝ EMAIL";
+    ViewData["ActivePage"] = ManageNavPages.Email;
+    Layout = "~/Views/Identity/Manage/_Layout.cshtml";
+}
+
+<h1 class="h3 mb-1 text-gray-800">@ViewData["Title"]</h1>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+<div class="row">
+    <a asp-controller="Identity" asp-action="Email">Trở về</a> 
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
